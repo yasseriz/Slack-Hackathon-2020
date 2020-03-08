@@ -4,8 +4,6 @@ import slack
 from threading import Thread
 import json
 
-SLACK_OAUTH_TOKEN = 'xoxp-974374833842-975694945859-987792599605-7b11354a82531ce2a1232c406d97da58'
-SLACK_BOT_USER_TOKEN = 'xoxb-974374833842-975733718883-6bpKTrPLgFlc2PhSpqcsTQGA'
 
 Client = slack.WebClient(SLACK_BOT_USER_TOKEN)
 
