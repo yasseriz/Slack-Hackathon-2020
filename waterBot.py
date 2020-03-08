@@ -7,7 +7,7 @@ import calendar
 import time
 from datetime import datetime
 
-SLACK_BOT_USER_TOKEN = 'xoxb-974374833842-975733718883-7oEpBjSk9B92qE4CBWOw9Sfr'
+SLACK_BOT_USER_TOKEN = '<>'
 Client = slack.WebClient(SLACK_BOT_USER_TOKEN)
 
 app = Flask(__name__)
@@ -50,7 +50,7 @@ def backgroundworker(payload, userID, checkApp, userName):
 			dayString += reminderDays[i] + "s"
 
 	message = ":watermelon:WaterMeLot:watermelon: here. I've got your request, I shall remind you to drink water on *" + dayString + "* every *" +  str(duration) + "* starting from *" + str(startingTimeStr) + "* to *" + str(endingTimeStr) + "*"
-	Client.chat_postMessage(channel='general', text=message, token= 'xoxp-974374833842-975694945859-977717198561-68bf11c6366bf5f6979db26b46a77c68')
+	Client.chat_postMessage(channel='general', text=message, token= '<>')
 	reminderMessage = ":droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet:\n:watermelon:WaterMeLot:watermelon: here. *It's Water Time! Drink Up and Stay Hydrated!*\n:droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet::droplet:"
 	# Client.chat_scheduleMessage(channel='general', text=reminderMessage, token= 'xoxp-974374833842-975694945859-977717198561-68bf11c6366bf5f6979db26b46a77c68', post_at = 1583685067)
 	# schedules a message, using post_at  (fking UNIX timestamp)
