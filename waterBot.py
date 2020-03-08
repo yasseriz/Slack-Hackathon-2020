@@ -4,7 +4,8 @@ import slack
 from threading import Thread
 import json
 
-
+SLACK_OAUTH_TOKEN = 'xoxp-974374833842-975694945859-987792599605-7b11354a82531ce2a1232c406d97da58'
+SLACK_BOT_USER_TOKEN = 'xoxb-974374833842-975733718883-6bpKTrPLgFlc2PhSpqcsTQGA'
 
 Client = slack.WebClient(SLACK_BOT_USER_TOKEN)
 
@@ -13,18 +14,18 @@ app = Flask(__name__)
 def backgroundworker(payload, userID,checkApp, userName):
 	print(payload)
 
-	workingDuration = payload['view']['state']['values']['workinghours']['workinghours']
-	selectedDays = payload['view']['state']['values']['days']['days']['selected_option']
+	workingDuration = payload['view']['state']['values']['workinghours']['workinghours']['value']
+	selectedDays = payload['view']['state']['values']['days']['days']['selected_options']
 	duration = payload['view']['state']['values']['duration']['duration']['selected_option']['text']['text']
 
-	message = " I've got your request, I shall remind you to drink water on" + "\n " + selectedDays + "\n every" +  duration + "\n during " + workingDuration
+	message = " I've got your request, I shall remind you to drink water on" + "\n " + str(selectedDays) + "\n every " +  str(duration) + " during " + str(workingDuration)
 	Client.chat_postMessage(channel='general', text=message)
 
 @app.route('/slack/getco', methods=['POST'])
 def getco():
 
 	print("Received something")
-	print(request.form)
+	# print(request.form)
 	payload = json.loads(request.form.get('payload'))
 	checkApp = payload['view']['title']['text']
 	userID = payload['user']['id']
