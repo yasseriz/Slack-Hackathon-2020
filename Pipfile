@@ -7,10 +7,10 @@ verify_ssl = true
 
 [packages]
 slack = "*"
-slackclient = "*"
 flask = "*"
 zappa = "*"
 boto = "*"
+slackclient = "*"
 
 [requires]
 python_version = "3.7"

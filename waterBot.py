@@ -4,20 +4,22 @@ import slack
 from threading import Thread
 import json
 
-
+SLACK_BOT_USER_TOKEN = "<YOUR_SLACK_BOT_USER_TOKEN>"
 Client = slack.WebClient(SLACK_BOT_USER_TOKEN)
 
 app = Flask(__name__)
 
-def backgroundworker(payload, userID,checkApp, userName):
+def backgroundworker(payload, userID, checkApp, userName):
 	print(payload)
 
-	workingDuration = payload['view']['state']['values']['workinghours']['workinghours']['value']
+	# workingDuration = payload['view']['state']['values']['workinghours']['workinghours']['value']
+	startingTime = payload['view']['state']['values']['startingTime']['startingTime']['selected_option']['value']
+	endingTime = payload['view']['state']['values']['endingTime']['endingTime']['selected_option']['value']
 	selectedDays = payload['view']['state']['values']['days']['days']['selected_options']
 	duration = payload['view']['state']['values']['duration']['duration']['selected_option']['text']['text']
 
-	message = " I've got your request, I shall remind you to drink water on" + "\n " + str(selectedDays) + "\n every " +  str(duration) + " during " + str(workingDuration)
-	Client.chat_postMessage(channel='general', text=message)
+	message = " I've got your request, I shall remind you to drink water on" + "\n " + str(selectedDays) + "\n every " +  str(duration) + " starting from " + str(startingTime) + " to " + str(endingTime)
+	Client.chat_postMessage(channel='general', text=message, token= '<YOUR_OAUTH_TOKEN>')
 
 @app.route('/slack/getco', methods=['POST'])
 def getco():
@@ -31,7 +33,7 @@ def getco():
 	
 	thr = Thread(target=backgroundworker, args=[payload, userID, checkApp, userName])
 	thr.start()
-	return "",200
+	return "", 200
 
 @app.route('/remindme', methods=['POST'])
 def remindme():
@@ -40,11 +42,11 @@ def remindme():
 	Client.views_open(
 	trigger_id=trigger_id,
 	view =
-	 {
+	{
 		"type": "modal",
 		"title": {
 			"type": "plain_text",
-			"text": "Remind me to drink water",
+			"text": "Set :droplet: Breaks",
 			"emoji": True
 		},
 		"submit": {
@@ -62,7 +64,7 @@ def remindme():
 				"type": "section",
 				"text": {
 					"type": "mrkdwn",
-					"text": "*Let waterbot remind you to drink water :smile:*"
+					"text": "*Hi There! I'm :watermelon:WaterMeLot:watermelon:,* \n*Your Friendly Neighbourhood Bot that tells you to drink water. *\n*With a few simple steps, You'll be hydrated in no time!*" #\n*Introduce Yourself to :watermelon:WaterMeLot:watermelon: :smile:*"
 				}
 			},
 			{
@@ -71,20 +73,379 @@ def remindme():
 			{
 				"type": "input",
 				"element": {
-					"type": "plain_text_input",
+					"type": "static_select",
 					"placeholder": {
 						"type": "plain_text",
-						"text": "eg. 10-19",
+						"text": "Select Starting Time",
 						"emoji": True
 					},
-					"action_id":"workinghours"
+					"action_id": "startingTime",
+					"options": [
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "8 AM"
+							},
+							"value": "8am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "9 AM"
+							},
+							"value": "9am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "10 AM"
+							},
+							"value": "10am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "11 AM"
+							},
+							"value": "11am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "12 PM"
+							},
+							"value": "12pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "1 PM"
+							},
+							"value": "1pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "2 PM"
+							},
+							"value": "2pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "3 PM"
+							},
+							"value": "3pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "4 PM"
+							},
+							"value": "4pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "5 PM"
+							},
+							"value": "5pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "6 PM"
+							},
+							"value": "6pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "7 PM"
+							},
+							"value": "7pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "8 PM"
+							},
+							"value": "8pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "9 PM"
+							},
+							"value": "9pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "10 PM"
+							},
+							"value": "10pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "11 PM"
+							},
+							"value": "11pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "12 AM"
+							},
+							"value": "12am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "1 AM"
+							},
+							"value": "1am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "2 AM"
+							},
+							"value": "2am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "3 AM"
+							},
+							"value": "3am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "4 AM"
+							},
+							"value": "4am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "5 AM"
+							},
+							"value": "5am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "6 AM"
+							},
+							"value": "6am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "7 AM"
+							},
+							"value": "7am"
+						}
+					]
 				},
 				"label": {
 					"type": "plain_text",
-					"text": "Enter Working Hours (24 Hours)",
+					"text": ":female-office-worker::skin-tone-4: What Time Do You Start Work?:male-office-worker:",
 					"emoji": True
 				},
-				"block_id":"workinghours"
+				"block_id": "startingTime"
+
+			},
+			{
+				"type": "input",
+				"element": {
+					"type": "static_select",
+					"placeholder": {
+						"type": "plain_text",
+						"text": "Select Ending Time",
+						"emoji": True
+					},
+					"action_id": "endingTime",
+					"options": [
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "8 AM"
+							},
+							"value": "8am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "9 AM"
+							},
+							"value": "9am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "10 AM"
+							},
+							"value": "10am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "11 AM"
+							},
+							"value": "11am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "12 PM"
+							},
+							"value": "12pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "1 PM"
+							},
+							"value": "1pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "2 PM"
+							},
+							"value": "2pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "3 PM"
+							},
+							"value": "3pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "4 PM"
+							},
+							"value": "4pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "5 PM"
+							},
+							"value": "5pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "6 PM"
+							},
+							"value": "6pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "7 PM"
+							},
+							"value": "7pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "8 PM"
+							},
+							"value": "8pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "9 PM"
+							},
+							"value": "9pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "10 PM"
+							},
+							"value": "10pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "11 PM"
+							},
+							"value": "11pm"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "12 AM"
+							},
+							"value": "12am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "1 AM"
+							},
+							"value": "1am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "2 AM"
+							},
+							"value": "2am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "3 AM"
+							},
+							"value": "3am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "4 AM"
+							},
+							"value": "4am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "5 AM"
+							},
+							"value": "5am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "6 AM"
+							},
+							"value": "6am"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "7 AM"
+							},
+							"value": "7am"
+						}
+					]
+				},
+				"label": {
+					"type": "plain_text",
+					"text": ":construction_worker::skin-tone-3: What Time Do You End Work? :female-construction-worker::skin-tone-2:",
+					"emoji": True
+				},
+				"block_id": "endingTime"
 			},
 			{
 				"type": "divider"
@@ -93,18 +454,18 @@ def remindme():
 				"type": "input",
 				"label": {
 					"type": "plain_text",
-					"text": "Select days to be reminded on",
+					"text": ":male-factory-worker::skin-tone-6:When Do You Work?:female-factory-worker::skin-tone-3:",
 					"emoji": True
 				},
-				"block_id":"days",
+				"block_id": "days",
 				"element": {
 					"type": "multi_static_select",
 					"placeholder": {
 						"type": "plain_text",
-						"text": "Select days",
+						"text": "Select Days",
 						"emoji": True
 					},
-					"action_id":"days",
+					"action_id": "days",
 					"options": [
 						{
 							"text": {
@@ -177,7 +538,7 @@ def remindme():
 						"text": "Select duration",
 						"emoji": True
 					},
-					"action_id":"duration",
+					"action_id": "duration",
 					"options": [
 						{
 							"text": {
@@ -198,7 +559,7 @@ def remindme():
 						{
 							"text": {
 								"type": "plain_text",
-								"text": "4 hours",
+								"text": "2 hours",
 								"emoji": True
 							},
 							"value": "hour2"
@@ -207,13 +568,13 @@ def remindme():
 				},
 				"label": {
 					"type": "plain_text",
-					"text": "Every..",
+					"text": ":droplet:How Often Do You Want To Drink?:droplet:",
 					"emoji": True
 				},
-				"block_id":"duration"
+				"block_id": "duration"
 			}
 		]
-	 }
+	}
 	)
 	return "",200
 
