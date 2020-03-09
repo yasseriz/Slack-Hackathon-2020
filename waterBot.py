@@ -40,6 +40,8 @@ def backgroundworker(payload, userID, checkApp, userName):
 		waitFor = 60 * 60
 	elif waitingTime == "hour2":
 		waitFor = 120 * 60
+	elif waitingTime == "second30":
+		waitFor = 30
 		
 
 	dayString = ""
@@ -72,8 +74,8 @@ def backgroundworker(payload, userID, checkApp, userName):
 			current = int(time.time()) + 20
 			# only schedule if the it falls on the corresponding day of the week
 			if ep_to_day(current) in reminderDays and time.localtime(current).tm_hour >= timeLower.hour and time.localtime(current).tm_hour <= timeUpper.hour:
-				# Client.chat_scheduleMessage(channel='general', text=reminderMessage, token= 'xoxp-974374833842-975694945859-977717198561-68bf11c6366bf5f6979db26b46a77c68', post_at = current)
-				Client.chat_postMessage(channel='general', text=reminderMessage, token= 'xoxp-974374833842-975694945859-977717198561-68bf11c6366bf5f6979db26b46a77c68')
+				# Client.chat_scheduleMessage(channel='general', text=reminderMessage, token= 'oauth', post_at = current)
+				Client.chat_postMessage(channel='general', text=reminderMessage, token= '<OAUTH>')
 				# current = current + waitFor
 				# print(Client.chat_scheduledMessages_list()['scheduled_messages'])
 				time.sleep(waitFor)
@@ -629,6 +631,14 @@ def remindme():
 								"emoji": True
 							},
 							"value": "hour2"
+						},
+						{
+							"text": {
+								"type": "plain_text",
+								"text": "30 seconds",
+								"emoji": True
+							},
+							"value": "second30"
 						}
 					]
 				},
